@@ -8,15 +8,18 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	const sourceLanguages = data.sourceLanguages();
+	const targetLanguages = data.targetLanguages();
 </script>
 
 <div class="mx-auto flex h-full max-w-4xl flex-col gap-8 center">
 	<Book />
 
 	<div class="flex flex-row items-center">
-		<LanguageSelection languages={data.sourceLanguages} />
+		<LanguageSelection languages={$sourceLanguages.data ?? []} />
 		<Arrow class="text-2xl text-muted" />
-		<LanguageSelection languages={data.targetLanguages} />
+		<LanguageSelection languages={$targetLanguages.data ?? []} />
 	</div>
 
 	<TextField placeholder="Search for any word or phrase" />
