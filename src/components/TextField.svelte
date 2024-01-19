@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { cn } from '$lib/utils';
 	import { cva, type VariantProps } from 'class-variance-authority';
 	import type { HTMLInputAttributes } from 'svelte/elements';
-	import { twMerge } from 'tailwind-merge';
 
 	const textField = cva([
 		'rounded-full w-full',
@@ -9,9 +9,8 @@
 		'p-3 px-8',
 		'outline-none',
 		'transition-all',
-		'border border-clear focus:border-gray-200',
-		'typography typography-md',
-		'placeholder:typography-muted'
+		'border border-clear focus:border-default',
+		'placeholder:typography-muted typography-sm'
 	]);
 
 	interface $$Props extends HTMLInputAttributes, VariantProps<typeof textField> {
@@ -21,4 +20,4 @@
 	export let placeholder: $$Props['placeholder'] = undefined;
 </script>
 
-<input {...$$props} class={twMerge(textField({ class: $$props.class }))} {placeholder} />
+<input {...$$props} class={cn(textField({ class: $$props.class }))} {placeholder} />

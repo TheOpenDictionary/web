@@ -11,7 +11,7 @@ export default defineConfig({
 		Icons({
 			compiler: 'svelte',
 			customCollections: {
-				'od-color': FileSystemIconLoader('./src/icons/color')
+				color: FileSystemIconLoader('./src/icons/color')
 			}
 		})
 	],

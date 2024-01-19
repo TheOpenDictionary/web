@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1705648428862,
+      "tag": "0000_striped_lethal_legion",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1705658764687,
+      "tag": "0001_mute_johnny_storm",
+      "breakpoints": true
+    }
+  ]
+}

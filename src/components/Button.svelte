@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { cva } from 'class-variance-authority';
-	import { twMerge } from 'tailwind-merge';
+
+	import { cn } from '$lib/utils';
 
 	const button = cva([
 		'rounded-full',
 		'bg-gradient-to-b from-blue-light to-blue-dark',
 		'px-12 py-3',
 		'transition-all duration-1000 [&]:[transition-timing-function:cubic-bezier(0,0,.2,1)]',
-		'typography typography-title typography-sm typography-invert',
-		'active:scale-95'
+		'active:scale-95',
+		'text text-inverted font-display font-light'
 	]);
 </script>
 
-<button class={twMerge(button({ class: $$props.class }))}>
+<button class={cn(button(), $$props.class)}>
 	<slot />
 </button>

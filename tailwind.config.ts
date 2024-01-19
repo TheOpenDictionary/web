@@ -16,6 +16,19 @@ export default {
 			display: ['Geologica Variable', 'Helvetica', 'Arial', 'sans-serif'],
 			sans: ['Noto Sans Variable', 'Helvetica', 'Arial', 'sans-serif']
 		},
+		borderColor: ({ theme }) => ({
+			DEFAULT: theme('colors.gray.900/0.08'),
+			clear: 'transparent'
+		}),
+		boxShadow: {
+			md: [
+				'14px 13px 41px 0px rgba(0, 0, 0, 0.02)',
+				'54px 52px 75px 0px rgba(0, 0, 0, 0.02)',
+				'122px 116px 101px 0px rgba(0, 0, 0, 0.01)',
+				'217px 207px 120px 0px rgba(0, 0, 0, 0.00)',
+				'339px 323px 131px 0px rgba(0, 0, 0, 0.00)'
+			].join(', ')
+		},
 		colors: {
 			clear: 'transparent',
 			white: '#ffffff',
@@ -36,36 +49,12 @@ export default {
 				900: '#272829'
 			}
 		},
-		typography: ({ theme }) => ({
-			colors: {
-				DEFAULT: {
-					light: theme('colors.gray.900'),
-					dark: theme('colors.white')
-				},
-				muted: theme('colors.gray.500')
-			},
-			sizes: ['sm', 'md', 'lg'],
-			variants: {
-				DEFAULT: {
-					family: theme('fontFamily.sans'),
-					weight: theme('fontWeight.normal'),
-					leading: theme('lineHeight.normal'),
-					size: {
-						sm: theme('textSize.xs'),
-						md: theme('textSize.sm'),
-						lg: theme('textSize.base')
-					}
-				},
-				title: {
-					family: theme('fontFamily.display'),
-					weight: theme('fontWeight.light'),
-					sizes: {
-						sm: theme('textSize.base'),
-						md: theme('textSize.lg'),
-						lg: theme('textSize.xl')
-					}
-				}
-			}
+		textColor: ({ theme }) => ({
+			DEFAULT: theme('colors.gray.900'),
+			subtle: theme('colors.gray.700'),
+			muted: theme('colors.gray.500'),
+      primary: theme('colors.blue.dark'),
+			inverted: theme('colors.white')
 		}),
 		extend: {}
 	},
