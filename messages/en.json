@@ -1,0 +1,12 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"languages_en": "English",
+  "languages_de": "German",
+  "languages_fr": "French",
+  "languages_it": "Italian",
+  "languages_es": "Spanish",
+  "languages_pt": "Portuguese",
+  "languages_ru": "Russian",
+  "languages_ja": "Japanese",
+  "languages_zh": "Chinese"
+}

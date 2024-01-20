@@ -1,0 +1,18 @@
+debug: true
+progress:
+  type: file
+meilisearch:
+  api_url: 'http://host.docker.internal:7700/'
+  api_key: '3OF83dZ0dl-3Am85Va9eri9IrQZob22pD91hRXlvbXU'
+  insert_size: 1000
+  insert_interval: 10
+source:
+  type: postgres
+  host: host.docker.internal
+  port: 5432
+  database: tjnickerson
+  user: tjnickerson
+sync:
+  - table: entries
+    index: entries
+    full: true

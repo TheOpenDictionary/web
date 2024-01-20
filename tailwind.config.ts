@@ -18,6 +18,7 @@ export default {
 		},
 		borderColor: ({ theme }) => ({
 			DEFAULT: theme('colors.gray.900/0.08'),
+			default: theme('colors.gray.900/0.08'),
 			clear: 'transparent'
 		}),
 		boxShadow: {
@@ -53,7 +54,7 @@ export default {
 			DEFAULT: theme('colors.gray.900'),
 			subtle: theme('colors.gray.700'),
 			muted: theme('colors.gray.500'),
-      primary: theme('colors.blue.dark'),
+			primary: theme('colors.blue.dark'),
 			inverted: theme('colors.white')
 		}),
 		extend: {}

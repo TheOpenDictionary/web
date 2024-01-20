@@ -6,11 +6,32 @@
 
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 
+	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
+
+	import { getTextDirection } from '$lib/i18n.js';
+	import { setLanguageTag, sourceLanguageTag, type AvailableLanguageTag } from '$i18n/runtime';
+
 	import type { LayoutData } from './$types';
+
+	$: lang = ($page.params.lang as AvailableLanguageTag) ?? sourceLanguageTag;
+
+	$: setLanguageTag(lang);
+
+	$: textDirection = getTextDirection(lang);
+
+	$: {
+		if (browser) {
+			document.documentElement.dir = textDirection;
+			document.documentElement.lang = lang;
+		}
+	}
 
 	export let data: LayoutData;
 </script>
 
-<QueryClientProvider client={data.queryClient}>
-	<slot />
-</QueryClientProvider>
+{#key lang}
+	<QueryClientProvider client={data.queryClient}>
+		<slot />
+	</QueryClientProvider>
+{/key}

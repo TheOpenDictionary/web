@@ -4,18 +4,22 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "paraglide-js compile --outdir ./src/i18n --project ./project.inlang && vite build",
 		"preview": "vite preview",
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
+		"sync-db": "tsx scripts/sync-db.ts",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"db": "drizzle-kit"
+		"db": "drizzle-kit",
+		"postinstall": "paraglide-js compile --project ./project.inlang"
 	},
 	"devDependencies": {
+		"@inlang/paraglide-js": "1.2.1",
+		"@inlang/paraglide-js-adapter-vite": "^1.2.7",
 		"@playwright/test": "^1.41.0",
 		"@sveltejs/adapter-auto": "^3.1.0",
 		"@sveltejs/kit": "^2.4.0",
@@ -25,6 +29,7 @@
 		"@typescript-eslint/eslint-plugin": "^6.19.0",
 		"@typescript-eslint/parser": "^6.19.0",
 		"autoprefixer": "^10.4.17",
+		"dotenv": "^16.3.2",
 		"drizzle-kit": "^0.20.13",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
@@ -37,7 +42,6 @@
 		"svelte": "^4.2.9",
 		"svelte-check": "^3.6.3",
 		"tailwindcss": "^3.4.1",
-		"ts-node": "^10.9.2",
 		"tslib": "^2.6.2",
 		"typescript": "^5.3.3",
 		"vite": "^5.0.11",
@@ -55,10 +59,12 @@
 		"@trpc/server": "^10.45.0",
 		"class-variance-authority": "^0.7.0",
 		"drizzle-orm": "^0.29.3",
+		"meilisearch": "^0.37.0",
 		"pg": "^8.11.3",
 		"tailwind-merge": "^2.2.0",
 		"trpc-svelte-query-adapter": "^2.2.2",
 		"trpc-sveltekit": "^3.5.22",
+		"tsx": "^4.7.0",
 		"unplugin-icons": "^0.18.2",
 		"zod": "^3.22.4"
 	}

@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import { pgTable, uuid, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const dictionaries = pgTable('dictionaries', {
@@ -7,6 +8,10 @@ export const dictionaries = pgTable('dictionaries', {
 	targetLanguage: text('target_language').notNull().default('en')
 });
 
+export const dictionaryRelations = relations(dictionaries, ({ many }) => ({
+	entries: many(entries, { relationName: 'entries' })
+}));
+
 export const entries = pgTable('entries', {
 	id: uuid('id').primaryKey().notNull(),
 	createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
@@ -14,6 +19,15 @@ export const entries = pgTable('entries', {
 	term: text('term').notNull(),
 	dictionaryId: uuid('dictionary_id').references(() => dictionaries.id)
 });
+
+export const entryRelations = relations(entries, ({ one, many }) => ({
+	dictionary: one(dictionaries, {
+		fields: [entries.dictionaryId],
+		references: [dictionaries.id],
+		relationName: 'dictionary'
+	}),
+	etymologies: many(etymologies, { relationName: 'etymologies' })
+}));
 
 export const etymologies = pgTable('etymologies', {
 	id: uuid('id').primaryKey().notNull(),
@@ -23,12 +37,31 @@ export const etymologies = pgTable('etymologies', {
 		.references(() => entries.id)
 });
 
+export const etymologyRelations = relations(etymologies, ({ one, many }) => ({
+	entry: one(entries, {
+		fields: [etymologies.entryId],
+		references: [entries.id],
+		relationName: 'entry'
+	}),
+	senses: many(senses, { relationName: 'senses' })
+}));
+
 export const senses = pgTable('senses', {
 	id: uuid('id').primaryKey().notNull(),
 	etymologyId: uuid('etymology_id')
 		.notNull()
 		.references(() => etymologies.id)
 });
+
+export const senseRelations = relations(senses, ({ one, many }) => ({
+	etymology: one(etymologies, {
+		fields: [senses.etymologyId],
+		references: [etymologies.id],
+		relationName: 'etymology'
+	}),
+	groups: many(groups, { relationName: 'groups' }),
+	definitions: many(groups, { relationName: 'definitions' })
+}));
 
 export const groups = pgTable('groups', {
 	id: uuid('id').primaryKey().notNull(),
