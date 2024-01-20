@@ -9,7 +9,7 @@ export const dictionaries = pgTable('dictionaries', {
 });
 
 export const dictionaryRelations = relations(dictionaries, ({ many }) => ({
-	entries: many(entries, { relationName: 'entries' })
+	entries: many(entries)
 }));
 
 export const entries = pgTable('entries', {
@@ -23,10 +23,9 @@ export const entries = pgTable('entries', {
 export const entryRelations = relations(entries, ({ one, many }) => ({
 	dictionary: one(dictionaries, {
 		fields: [entries.dictionaryId],
-		references: [dictionaries.id],
-		relationName: 'dictionary'
+		references: [dictionaries.id]
 	}),
-	etymologies: many(etymologies, { relationName: 'etymologies' })
+	etymologies: many(etymologies)
 }));
 
 export const etymologies = pgTable('etymologies', {
@@ -40,10 +39,9 @@ export const etymologies = pgTable('etymologies', {
 export const etymologyRelations = relations(etymologies, ({ one, many }) => ({
 	entry: one(entries, {
 		fields: [etymologies.entryId],
-		references: [entries.id],
-		relationName: 'entry'
+		references: [entries.id]
 	}),
-	senses: many(senses, { relationName: 'senses' })
+	senses: many(senses)
 }));
 
 export const senses = pgTable('senses', {
@@ -56,11 +54,10 @@ export const senses = pgTable('senses', {
 export const senseRelations = relations(senses, ({ one, many }) => ({
 	etymology: one(etymologies, {
 		fields: [senses.etymologyId],
-		references: [etymologies.id],
-		relationName: 'etymology'
+		references: [etymologies.id]
 	}),
-	groups: many(groups, { relationName: 'groups' }),
-	definitions: many(groups, { relationName: 'definitions' })
+	groups: many(groups),
+	definitions: many(definitions)
 }));
 
 export const groups = pgTable('groups', {
@@ -71,12 +68,33 @@ export const groups = pgTable('groups', {
 		.references(() => senses.id)
 });
 
+export const groupRelations = relations(groups, ({ one, many }) => ({
+	sense: one(senses, {
+		fields: [groups.senseId],
+		references: [senses.id]
+	}),
+	definitions: many(definitions)
+}));
+
 export const definitions = pgTable('definitions', {
 	id: uuid('id').primaryKey().notNull(),
 	value: text('value').notNull(),
 	senseId: uuid('sense_id').references(() => senses.id),
 	groupId: uuid('group_id').references(() => groups.id)
 });
+
+export const definitionRelations = relations(definitions, ({ one, many }) => ({
+	sense: one(senses, {
+		fields: [definitions.senseId],
+		references: [senses.id]
+	}),
+	group: one(groups, {
+		fields: [definitions.groupId],
+		references: [groups.id]
+	}),
+	notes: many(notes),
+	examples: many(examples)
+}));
 
 export const notes = pgTable('notes', {
 	id: uuid('id').primaryKey().notNull(),
@@ -86,9 +104,27 @@ export const notes = pgTable('notes', {
 		.references(() => definitions.id)
 });
 
+export const noteRelations = relations(notes, ({ one }) => ({
+	definition: one(definitions, {
+		fields: [notes.definitionId],
+		references: [definitions.id]
+	})
+}));
+
 export const examples = pgTable('examples', {
 	id: text('id').primaryKey().notNull(),
 	text: text('text').notNull(),
 	definitionId: uuid('definition_id').references(() => definitions.id),
 	noteId: uuid('note_id').references(() => notes.id)
 });
+
+export const exampleRelations = relations(examples, ({ one }) => ({
+	definition: one(definitions, {
+		fields: [examples.definitionId],
+		references: [definitions.id]
+	}),
+	note: one(notes, {
+		fields: [examples.noteId],
+		references: [notes.id]
+	})
+}));
