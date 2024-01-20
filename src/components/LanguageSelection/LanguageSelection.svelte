@@ -3,10 +3,10 @@
 
 	import LanguageSelector from './LanguageSelector.svelte';
 
-	export let sourceLanguage: string;
-	export let targetLanguage: string;
-	export let sourceLanguages: string[];
-	export let targetLanguages: string[];
+	export let sourceLanguage: string = 'en';
+	export let targetLanguage: string = 'en';
+	export let sourceLanguages: string[] = [];
+	export let targetLanguages: string[] = [];
 </script>
 
 <div class="flex flex-row items-center">

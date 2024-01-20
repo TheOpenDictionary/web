@@ -22,6 +22,7 @@ export default {
 			clear: 'transparent'
 		}),
 		boxShadow: {
+			sm: '0 4px 48px rgba(0, 0, 0, 0.04)',
 			md: [
 				'14px 13px 41px 0px rgba(0, 0, 0, 0.02)',
 				'54px 52px 75px 0px rgba(0, 0, 0, 0.02)',

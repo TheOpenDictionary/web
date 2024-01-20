@@ -10,7 +10,8 @@ export default {
 			$components: './src/components',
 			$lib: './src/lib',
 			$i18n: './src/i18n/',
-			$db: './db'
+			$db: './db',
+			$server: './src/server'
 		},
 		prerender: {
 			entries: ['/']

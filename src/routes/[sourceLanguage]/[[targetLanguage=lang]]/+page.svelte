@@ -23,7 +23,7 @@
 		sourceLanguage={data.sourceLanguage}
 	/>
 
-	<TextField placeholder="Search for any word or phrase" />
+	<TextField size="lg" placeholder="Search for any word or phrase" />
 
 	<Button>Search</Button>
 </div>

@@ -10,6 +10,8 @@ import Chinese from '~icons/twemoji/flag-china';
 
 import type { ComponentType } from 'svelte';
 
+export const DEFAULT_TARGET = 'en';
+
 export const FLAGS: Record<string, ComponentType> = {
 	en: English,
 	fr: French,

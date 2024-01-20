@@ -1,24 +1,32 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, uuid, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, text, timestamp, unique, index } from 'drizzle-orm/pg-core';
 
-export const dictionaries = pgTable('dictionaries', {
-	id: uuid('id').primaryKey().notNull(),
-	name: text('name').notNull(),
-	sourceLanguage: text('source_language').notNull().default('en'),
-	targetLanguage: text('target_language').notNull().default('en')
-});
+export const dictionaries = pgTable(
+	'dictionaries',
+	{
+		id: uuid('id').primaryKey().notNull(),
+		name: text('name').notNull(),
+		sourceLanguage: text('source_lang').notNull().default('en'),
+		targetLanguage: text('target_lang').notNull().default('en')
+	},
+	(t) => ({ languages: unique().on(t.sourceLanguage, t.targetLanguage) })
+);
 
 export const dictionaryRelations = relations(dictionaries, ({ many }) => ({
 	entries: many(entries)
 }));
 
-export const entries = pgTable('entries', {
-	id: uuid('id').primaryKey().notNull(),
-	createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-	updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
-	term: text('term').notNull(),
-	dictionaryId: uuid('dictionary_id').references(() => dictionaries.id)
-});
+export const entries = pgTable(
+	'entries',
+	{
+		id: uuid('id').primaryKey().notNull(),
+		createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+		updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
+		term: text('term').notNull(),
+		dictionaryId: uuid('dictionary_id').references(() => dictionaries.id)
+	},
+	(t) => ({ uniqueTerm: unique().on(t.term, t.dictionaryId), indexedTerm: index().on(t.term) })
+);
 
 export const entryRelations = relations(entries, ({ one, many }) => ({
 	dictionary: one(dictionaries, {

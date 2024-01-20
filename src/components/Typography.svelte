@@ -24,7 +24,7 @@
 			{
 				variant: 'title',
 				size: 'md',
-				class: 'text-title-md'
+				class: 'text-3xl'
 			},
 			{
 				variant: 'title',

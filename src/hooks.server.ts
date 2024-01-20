@@ -5,7 +5,9 @@ import { createTRPCHandle } from 'trpc-sveltekit';
 import { sourceLanguageTag, type AvailableLanguageTag } from '$i18n/runtime';
 
 import { getTextDirection } from '$lib/i18n';
-import { createContext, router } from '$lib/trpc';
+
+import { router } from '$server/router';
+import { createContext } from '$server/context';
 
 const handleI18n: Handle = ({ event, resolve }) => {
 	const lang: AvailableLanguageTag =
