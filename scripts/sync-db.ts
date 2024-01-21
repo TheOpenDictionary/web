@@ -1,69 +1,62 @@
-// import { MeiliSearch } from 'meilisearch';
+import dotenv from 'dotenv';
+import { eq, sql } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { alias } from 'drizzle-orm/pg-core';
+import { MeiliSearch } from 'meilisearch';
+import pg from 'pg';
 
-// const ms = new MeiliSearch({
-// 	host: 'http://127.0.0.1:7700',
-// 	apiKey: '3OF83dZ0dl-3Am85Va9eri9IrQZob22pD91hRXlvbXU'
-// });
+import * as schema from '../db/schema';
 
-// import pg from 'pg';
-// import dotenv from 'dotenv';
+dotenv.config();
 
-// import { drizzle } from 'drizzle-orm/node-postgres';
+const ms = new MeiliSearch({
+	host: process.env.MEILISEARCH_HOST ?? '',
+	apiKey: process.env.MEILISEARCH_KEY ?? ''
+});
 
-// import * as schema from '../db/schema';
-// import { entries } from '../db/schema';
-// import { count, eq, placeholder, sql } from 'drizzle-orm';
+const { Client } = pg;
 
-// dotenv.config();
+const client = new Client({ connectionString: process.env.DATABASE_URL });
 
-// const { Client } = pg;
+await client.connect();
 
-// const client = new Client({ connectionString: process.env.DATABASE_URL });
+const db = drizzle(client, { schema });
 
-// await client.connect();
+const senseDefinitions = alias(schema.definitions, 'sense_definition');
 
-// const db = drizzle(client, { schema });
+const groupDefinitions = alias(schema.definitions, 'group_definition');
 
-// const totalCount = await db.select({ value: count() }).from(entries);
+const grouping = db
+	.select({
+		term: schema.entries.term,
+		definitions: sql`string_agg(${senseDefinitions.value}, '; ')`.as('definitions')
+	})
+	.from(schema.entries)
+	.leftJoin(schema.dictionaries, eq(schema.dictionaries.id, schema.entries.dictionaryId))
+	.leftJoin(schema.etymologies, eq(schema.etymologies.entryId, schema.entries.id))
+	.leftJoin(schema.senses, eq(schema.senses.etymologyId, schema.etymologies.id))
+	.leftJoin(schema.groups, eq(schema.groups.senseId, schema.senses.id))
+	.leftJoin(senseDefinitions, eq(senseDefinitions.senseId, schema.senses.id))
+	.leftJoin(groupDefinitions, eq(groupDefinitions.groupId, schema.groups.id))
+	.groupBy(schema.entries.term)
+	.as('grouping');
 
-// const query = await db.query.entries
-// 	.findMany({
-// 		limit: sql.placeholder('limit'),
-// 		offset: sql.placeholder('offset'),
-// 		orderBy: entries.id,
-// 		with: {
-// 			etymologies: {
-// 				with: {
-// 					senses: {
-// 						with: {
-// 							definitions: {
-// 								with: {
-// 									examples: true,
-// 									notes: true
-// 								}
-// 							},
-// 							groups: {
-// 								with: {
-// 									definitions: {
-// 										with: {
-// 											examples: true,
-// 											notes: true
-// 										}
-// 									}
-// 								}
-// 							}
-// 						}
-// 					}
-// 				}
-// 			}
-// 		}
-// 	})
-// 	.prepare('query');
+const rows = await db
+	.select({
+		id: schema.entries.id,
+		term: grouping.term,
+		definitions: grouping.definitions,
+		sourceLanguage: schema.dictionaries.sourceLanguage,
+		targetLanguage: schema.dictionaries.targetLanguage
+	})
+	.from(grouping)
+	.leftJoin(schema.entries, eq(schema.entries.term, grouping.term))
+	.leftJoin(schema.dictionaries, eq(schema.dictionaries.id, schema.entries.dictionaryId));
 
-// for (let i = 0; i < totalCount[0].value; i += 1000) {
-// 	const results = await query.execute({ limit: 1000, offset: i });
-// 	await ms.index('entries').addDocuments(results);
-// 	console.log(`Indexed ${i} of ${totalCount[0].value}`);
-// }
+const idx = ms.index('entries');
 
-// await client.end();
+await idx.addDocumentsInBatches(rows, 100_000, { primaryKey: 'id' });
+await idx.updateSearchableAttributes(['term', 'definitions']);
+await idx.updateFilterableAttributes(['sourceLanguage', 'targetLanguage']);
+
+await client.end();

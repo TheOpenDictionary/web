@@ -1,22 +1,23 @@
-<script lang="ts">
-	import { cn } from '$lib/utils';
-	import { cva, type VariantProps } from 'class-variance-authority';
-	import type { HTMLInputAttributes } from 'svelte/elements';
+<script lang="ts" context="module">
+	export const TEXTFIELD_ICON_SM = 20;
+	export const TEXTFIELD_ICON_LG = 22;
 
-	const textField = cva(
+	export const textField = cva(
 		[
+			'inline-flex flex-row items-center',
+			'bg-clear outline-none placeholder:text-muted',
 			'rounded-full w-full',
-			'bg-gray-200 from-blue-light to-blue-dark',
-			'outline-none',
-			'transition-all',
-			'border border-clear focus:border-default',
-			'placeholder:text-muted'
+			'bg-gray-100 from-blue-light to-blue-dark',
+			'transition-all duration-300 ease-in-out',
+			'border border-clear focus-within:border-default',
+			'group',
+			'gap-4'
 		],
 		{
 			variants: {
 				size: {
-					sm: 'p-3 px-6',
-					lg: 'p-3 px-8'
+					sm: 'h-12 px-5',
+					lg: 'h-[52px] px-6'
 				}
 			},
 			defaultVariants: {
@@ -24,12 +25,41 @@
 			}
 		}
 	);
+</script>
+
+<script lang="ts">
+	import { cva, type VariantProps } from 'class-variance-authority';
+	import type { ComponentType } from 'svelte';
+	import type { HTMLInputAttributes } from 'svelte/elements';
+
+	import { cn } from '$lib/utils';
 
 	interface $$Props extends Omit<HTMLInputAttributes, 'size'>, VariantProps<typeof textField> {
 		placeholder?: string | undefined;
+		icon?: ComponentType;
 	}
 
 	export let placeholder: $$Props['placeholder'] = undefined;
+	export let size: $$Props['size'] = undefined;
+	export let icon: $$Props['icon'] = undefined;
+	export let value: string = '';
 </script>
 
-<input {...$$props} class={cn(textField({ class: $$props.class }))} {placeholder} />
+<div class={cn(textField({ size, class: $$props.class }))}>
+	{#if icon}
+		<svelte:component
+			this={icon}
+			class="h-full text-muted transition-all duration-300 group-focus-within:text-subtle"
+			width={size === 'lg' ? TEXTFIELD_ICON_LG : TEXTFIELD_ICON_SM}
+			height={size === 'lg' ? TEXTFIELD_ICON_LG : TEXTFIELD_ICON_SM}
+		/>
+	{/if}
+	<input
+		on:keydown
+		on:keyup
+		on:change
+		class="h-full flex-grow bg-clear outline-none placeholder:text-muted"
+		{value}
+		{placeholder}
+	/>
+</div>

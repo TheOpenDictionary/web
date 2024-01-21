@@ -2,8 +2,8 @@
 	import Book from '~icons/color/book';
 
 	import Button from '$components/Button.svelte';
-	import TextField from '$components/TextField.svelte';
 	import LanguageSelection from '$components/LanguageSelection';
+	import SearchBox from '$components/SearchBox';
 
 	import type { PageData } from './$types';
 
@@ -23,7 +23,7 @@
 		sourceLanguage={data.sourceLanguage}
 	/>
 
-	<TextField size="lg" placeholder="Search for any word or phrase" />
+	<SearchBox size="lg" />
 
 	<Button>Search</Button>
 </div>

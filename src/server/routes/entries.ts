@@ -1,8 +1,7 @@
-import { z } from 'zod';
-import { and, inArray } from 'drizzle-orm';
-
 import { db } from '$db/client';
 import { dictionaries } from '$db/schema';
+import { and, inArray } from 'drizzle-orm';
+import { z } from 'zod';
 
 import { procedure, router } from '../context';
 
@@ -73,4 +72,21 @@ const get = procedure
 		return rows;
 	});
 
-export const entries = router({ get });
+const search = procedure
+	.input(
+		z.object({
+			term: z.string(),
+			language: z.string(),
+			target: z.string().default('en')
+		})
+	)
+	.query(async ({ input, ctx }) => {
+		const results = await ctx.meilisearch.index('entries').search(input.term, {
+			filter: `sourceLanguage = ${input.language} AND targetLanguage = ${input.target}`,
+			limit: 4
+		});
+
+		return results.hits as { term: string; definitions: string; id: string }[];
+	});
+
+export const entries = router({ search, get });

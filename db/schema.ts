@@ -54,6 +54,7 @@ export const etymologyRelations = relations(etymologies, ({ one, many }) => ({
 
 export const senses = pgTable('senses', {
 	id: uuid('id').primaryKey().notNull(),
+	pos: text('pos').notNull().default('un'),
 	etymologyId: uuid('etymology_id')
 		.notNull()
 		.references(() => etymologies.id)

@@ -1,12 +1,13 @@
 <script lang="ts" context="module">
-	export const typography = cva('text font-sans', {
+	export const typography = cva('text tracking-normal font-sans', {
 		variants: {
 			variant: {
 				body: '',
-				title: ''
+				title: 'font-medium font-display'
 			},
 			color: {
 				muted: 'text-muted',
+				subtle: 'text-subtle',
 				inverted: 'text-inverted'
 			},
 			size: {
@@ -19,17 +20,17 @@
 			{
 				variant: 'title',
 				size: 'sm',
-				class: 'text-title-sm'
+				class: 'text-sm'
 			},
 			{
 				variant: 'title',
 				size: 'md',
-				class: 'text-3xl'
+				class: 'text-base'
 			},
 			{
 				variant: 'title',
 				size: 'lg',
-				class: 'text-title-lg'
+				class: 'text-3xl'
 			}
 		],
 		defaultVariants: {
@@ -40,8 +41,9 @@
 </script>
 
 <script lang="ts">
-	import { cn } from '$lib/utils';
 	import { cva, type VariantProps } from 'class-variance-authority';
+
+	import { cn } from '$lib/utils';
 
 	interface $$Props extends VariantProps<typeof typography> {
 		class?: string;

@@ -1,12 +1,14 @@
-import { createTRPCClient, type TRPCClientInit } from 'trpc-sveltekit';
-import { svelteQueryWrapper } from 'trpc-svelte-query-adapter';
 import type { QueryClient } from '@tanstack/svelte-query';
-
-import type { Router } from '$server/router';
+import { svelteQueryWrapper } from 'trpc-svelte-query-adapter';
+import { createTRPCClient, type TRPCClientInit } from 'trpc-sveltekit';
 
 import { browser } from '$app/environment';
 
+import type { Router } from '$server/router';
+
 let browserClient: ReturnType<typeof svelteQueryWrapper<Router>>;
+
+export type Client = ReturnType<typeof createTRPCClient<Router>>;
 
 export function trpc(init?: TRPCClientInit, queryClient?: QueryClient) {
 	if (browser && browserClient) {
