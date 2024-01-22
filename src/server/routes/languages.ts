@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-import { db } from '$db/client';
-
+import { db } from '../../db/client';
 import { procedure, router } from '../context';
 
 /* -------------------------------------------------------------------------- */

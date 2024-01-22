@@ -1,11 +1,11 @@
+import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 
-import { drizzle } from 'drizzle-orm/node-postgres';
 import { DATABASE_URL } from '$env/static/private';
 
-const { Client } = pg;
-
 import * as schema from './schema';
+
+const { Client } = pg;
 
 const client = new Client({ connectionString: DATABASE_URL });
 

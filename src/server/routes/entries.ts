@@ -1,8 +1,11 @@
-import { db } from '$db/client';
-import { dictionaries } from '$db/schema';
+import { TRPCError } from '@trpc/server';
 import { and, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 
+import { convertMarkdownFields } from '$server/utils';
+
+import { db } from '../../db/client';
+import { dictionaries } from '../../db/schema';
 import { procedure, router } from '../context';
 
 /* -------------------------------------------------------------------------- */
@@ -18,7 +21,7 @@ const get = procedure
 		})
 	)
 	.query(async ({ input }) => {
-		const rows = await db.query.entries.findFirst({
+		const entry = await db.query.entries.findFirst({
 			with: {
 				dictionary: {
 					columns: {
@@ -69,7 +72,14 @@ const get = procedure
 				)
 		});
 
-		return rows;
+		if (!entry) {
+			throw new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'This entry could not be found.'
+			});
+		}
+
+		return convertMarkdownFields(entry);
 	});
 
 const search = procedure

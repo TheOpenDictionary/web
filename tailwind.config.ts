@@ -1,6 +1,5 @@
+import kit, { typescale } from '@kojodesign/tailwindkit';
 import { Config } from 'tailwindcss';
-
-import kit from '@kojodesign/tailwindkit';
 
 export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
@@ -21,6 +20,24 @@ export default {
 			default: theme('colors.gray.900/0.08'),
 			clear: 'transparent'
 		}),
+		fontSize: () => {
+			const scale = typescale('majorSecond', { baseSize: 14 });
+
+			// Material Design font scale
+			return {
+				xs: scale.get(-2),
+				sm: scale.get(-1),
+				base: scale.get(0),
+				lg: scale.get(1),
+				xl: scale.get(4),
+				'2xl': scale.get(5),
+				'3xl': scale.get(6),
+				'4xl': scale.get(7),
+				'5xl': scale.get(8),
+				'6xl': scale.get(10),
+				'7xl': scale.get(12)
+			};
+		},
 		boxShadow: {
 			sm: '0 4px 48px rgba(0, 0, 0, 0.04)',
 			md: [

@@ -57,9 +57,11 @@
 	<input
 		on:keydown
 		on:keyup
+		on:focus
+		on:blur
 		on:change
+		bind:value
 		class="h-full flex-grow bg-clear outline-none placeholder:text-muted"
-		{value}
 		{placeholder}
 	/>
 </div>

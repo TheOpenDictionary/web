@@ -5,6 +5,7 @@
 
 	import Search from '~icons/mdi/search';
 
+	import { clickOutside } from '$lib/actions';
 	import { sourceLanguage, targetLanguage } from '$lib/stores';
 	import { trpc, type Client } from '$lib/trpc';
 
@@ -14,8 +15,10 @@
 
 	export let size: VariantProps<typeof textField>['size'] = undefined;
 
+	let value: string;
 	let results: SearchResult[] = [];
 	let client: Client;
+	let isFocused = false;
 
 	let timeout: NodeJS.Timeout;
 
@@ -43,15 +46,23 @@
 	});
 </script>
 
-<div class="relative w-full">
+<div class="relative flex w-full items-center" use:clickOutside={() => (isFocused = false)}>
 	<TextField
+		on:focus={() => (isFocused = true)}
 		on:keyup={triggerSearch}
 		icon={Search}
 		{size}
+		bind:value
 		placeholder="Search for any word or phrase"
 	/>
 
-	{#if results.length > 0}
-		<Autocomplete items={results} />
+	{#if isFocused && results.length > 0}
+		<Autocomplete
+			on:click={() => {
+				isFocused = false;
+				value = '';
+			}}
+			items={results}
+		/>
 	{/if}
 </div>

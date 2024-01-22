@@ -1,6 +1,5 @@
 <script lang="ts">
 	import '../app.pcss';
-
 	import '@fontsource-variable/geologica';
 	import '@fontsource-variable/noto-sans';
 
@@ -10,6 +9,7 @@
 	import { page } from '$app/stores';
 
 	import { getTextDirection } from '$lib/i18n.js';
+
 	import { setLanguageTag, sourceLanguageTag, type AvailableLanguageTag } from '$i18n/runtime';
 
 	import type { LayoutData } from './$types';
@@ -32,6 +32,8 @@
 
 {#key lang}
 	<QueryClientProvider client={data.queryClient}>
-		<slot />
+		{#key $page.url.pathname}
+			<slot />
+		{/key}
 	</QueryClientProvider>
 {/key}
