@@ -12,7 +12,7 @@
 		<a href={`/${$sourceLanguage}/${$targetLanguage}`}>
 			<Book width={32} height={32} />
 		</a>
-		<LanguageSelection sourceLanguage="en" targetLanguage="en" />
-		<SearchBox />
+		<LanguageSelection size="sm" sourceLanguage="en" targetLanguage="en" />
+		<SearchBox size="sm" />
 	</div>
 </nav>

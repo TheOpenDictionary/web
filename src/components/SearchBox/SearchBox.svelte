@@ -5,6 +5,8 @@
 
 	import Search from '~icons/mdi/search';
 
+	import { goto } from '$app/navigation';
+
 	import { clickOutside } from '$lib/actions';
 	import { sourceLanguage, targetLanguage } from '$lib/stores';
 	import { trpc, type Client } from '$lib/trpc';
@@ -22,8 +24,16 @@
 
 	let timeout: NodeJS.Timeout;
 
+	async function goToSearch(query: string) {
+		await goto(`/${$sourceLanguage}/${$targetLanguage}/search/${query}`);
+	}
+
 	async function triggerSearch(e: KeyboardEvent) {
 		const query = (e.target as HTMLInputElement).value;
+
+		if (e.key === 'Enter') {
+			return goToSearch(query);
+		}
 
 		if (query.trim().length === 0) {
 			results = [];

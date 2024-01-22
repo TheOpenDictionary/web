@@ -1,9 +1,9 @@
 <script lang="ts">
-	import * as m from '$i18n/messages';
-
+	import { clickOutside } from '$lib/actions';
 	import { FLAGS } from '$lib/constants';
 	import { cn } from '$lib/utils';
-	import { clickOutside } from '$lib/actions';
+
+	import * as m from '$i18n/messages';
 
 	import Card from '../Card.svelte';
 
@@ -22,6 +22,7 @@
 	}
 
 	export let languages: string[];
+	export let size: 'sm' | 'lg' = 'lg';
 	export let selectedLanguage: string;
 	export let getLink: (language: string) => string;
 
@@ -42,6 +43,7 @@
 	/>
 
 	<span
+		class:text-sm={size === 'sm'}
 		class="font-display font-light text-subtle transition-opacity group-active:opacity-50 group-has-[:checked]:text"
 	>
 		{getLanguageName(selectedLanguage)}

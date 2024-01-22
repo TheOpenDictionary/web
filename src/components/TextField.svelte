@@ -16,7 +16,7 @@
 		{
 			variants: {
 				size: {
-					sm: 'h-12 px-5',
+					sm: 'h-12 px-5 text-sm',
 					lg: 'h-[52px] px-6'
 				}
 			},

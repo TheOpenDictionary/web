@@ -4,7 +4,7 @@
 			variant: {
 				body: '',
 				title: 'font-medium font-display',
-				headline: 'font-medium font-display'
+				headline: 'font-normal font-display'
 			},
 			color: {
 				muted: 'text-muted',
